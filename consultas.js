@@ -87,3 +87,13 @@ function clasificarPorRangoEpisodios(personajes) {
     return acc;
   }, { "1-5": 0, "6-15": 0, "16-30": 0, "30+": 0 });
 }
+
+module.exports = {
+    obtenerHumanosVivos,
+    obtenerMuchosEpisodios,
+    obtenerAlienFemale,
+    existeConTipo,
+    todosCumplenImagenEpisodios,
+    agruparPorEspecie,
+    clasificarPorRangoEpisodios
+};

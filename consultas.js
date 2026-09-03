@@ -20,3 +20,17 @@ function obtenerAlienFemale(personajes) {
     p => p.especie === "Alien" && p.genero === "Female"
   );
 }
+
+// 4. some -> al menos un personaje con tipo definido
+function existeConTipo(personajes) {
+  return personajes.some(
+    p => p.tipo && p.tipo.trim() !== ""
+  );
+}
+
+// 5. every -> todos los personajes tienen imagen y al menos un episodio
+function todosCumplenImagenEpisodios(personajes) {
+  return personajes.every(
+    p => Boolean(p.imagen) && p.cantidadEpisodios >= 1
+  );
+}

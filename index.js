@@ -15,7 +15,7 @@ async function main() {
     fs.writeFileSync(CACHE_FILE, JSON.stringify(personajesCrudos));
   }
 
-  // Normalización con map.
+  // Normalización con map
   const personajesNormalizados = normalizarPersonajes(personajesCrudos);
 
   console.log("Ejemplo de personaje normalizado:", personajesNormalizados[0]);

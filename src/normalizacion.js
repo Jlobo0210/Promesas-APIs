@@ -1,4 +1,4 @@
-// Transforma un personaje crudo de la API a la estructura establecida.
+// Transforma un personaje crudo de la API a la estructura establecida
 function normalizarPersonaje(personaje) {
   return {
     id: personaje.id,
@@ -14,7 +14,7 @@ function normalizarPersonaje(personaje) {
   };
 }
 
-// Aplica map sobre todo el arreglo.
+// Aplica map sobre todo el arreglo
 function normalizarPersonajes(personajes) {
   return personajes.map(normalizarPersonaje);
 }

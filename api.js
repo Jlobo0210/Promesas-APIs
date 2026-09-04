@@ -5,7 +5,7 @@ function esperar(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function fetchJson(url) {
+async function fetchJson(url, intentosRestantes = 3) {
   const respuesta = await fetch(url);
 
   if (!respuesta.ok) {
@@ -48,6 +48,7 @@ async function obtenerTodosLosPersonajes() {
 }
 
 module.exports = {
+  esperar,
   fetchJson,
   obtenerInfoInicial,
   generarUrlsDePaginas,

@@ -28,8 +28,45 @@ function generarUrlsDePaginas(totalPaginas) {
   return urls;
 }
 
+
+// Estrategia secuencial
+async function obtenerTodosSecuencial() {
+  const inicio = Date.now();
+
+  const { pages: totalPaginas } = await obtenerInfoInicial(); //pages del objeto info
+  const urls = generarUrlsDePaginas(totalPaginas);
+
+  let personajes = [];
+  for (const url of urls) {
+    const data = await fetchJson(url);
+    personajes = personajes.concat(data.results);
+  }
+
+  const fin = Date.now();
+  console.log(`Estrategia SECUENCIAL: ${fin - inicio} ms, ${personajes.length} personajes`);
+  return personajes;
+}
+
+// Estrategia concurrente con Promise.all()
+async function obtenerTodosConcurrente() {
+  const inicio = Date.now();
+
+  const { pages: totalPaginas } = await obtenerInfoInicial();
+  const urls = generarUrlsDePaginas(totalPaginas);
+
+  const promesas = urls.map((url) => fetchJson(url));
+  const resultados = await Promise.all(promesas);
+  const personajes = resultados.flatMap((data) => data.results);
+
+  const fin = Date.now();
+  console.log(`Estrategia CONCURRENTE: ${fin - inicio} ms, ${personajes.length} personajes`);
+  return personajes;
+}
+
 module.exports = {
   fetchJson,
   obtenerInfoInicial,
   generarUrlsDePaginas,
+  obtenerTodosSecuencial,
+  obtenerTodosConcurrente,
 };

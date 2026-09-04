@@ -1,5 +1,9 @@
 const BASE_URL = "https://rickandmortyapi.com/api/character";
 
+function esperar(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 // validando status y content-type antes de intentar parsear JSON.
 async function fetchJson(url) {
   const respuesta = await fetch(url);

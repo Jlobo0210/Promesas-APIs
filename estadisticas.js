@@ -20,7 +20,7 @@ async function obtenerTodosSecuencial() {
 }
 
 // Estrategia concurrente con Promise.all()
-async function obtenerTodosConcurrente(tamanoLote = 3, pausaEntreLotesMs = 2000) {
+async function obtenerTodosConcurrente(tamanoLote = 3, pausaEntreLotesMs = 1000) {
   const inicio = Date.now();
 
   const { pages: totalPaginas } = await obtenerInfoInicial();

@@ -5,7 +5,7 @@ function esperar(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function fetchJson(url, intentosRestantes = 3) {
+async function fetchJson(url) {
   const respuesta = await fetch(url);
 
   if (!respuesta.ok) {

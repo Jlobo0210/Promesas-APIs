@@ -32,25 +32,9 @@ function generarUrlsDePaginas(totalPaginas) {
   return urls;
 }
 
-// Consume todas las páginas de la API y devuelve un único arreglo con todos los personajes
-async function obtenerTodosLosPersonajes() {
-  const { pages: totalPaginas } = await obtenerInfoInicial();
-  const urls = generarUrlsDePaginas(totalPaginas);
-
-  let personajes = [];
-  for (const url of urls) {
-    const data = await fetchJson(url);
-    personajes = personajes.concat(data.results);
-    await esperar(500);
-  }
-
-  return personajes;
-}
-
 module.exports = {
   esperar,
   fetchJson,
   obtenerInfoInicial,
   generarUrlsDePaginas,
-  obtenerTodosLosPersonajes,
 };

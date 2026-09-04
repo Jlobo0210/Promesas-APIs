@@ -1,37 +1,4 @@
-const BASE_URL = "https://rickandmortyapi.com/api/character";
-
-function esperar(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-// validando status y content-type antes de intentar parsear JSON.
-async function fetchJson(url) {
-  const respuesta = await fetch(url);
-
-  if (!respuesta.ok) { // en vez de seguir intentando parsear el json
-    const texto = await respuesta.text();
-    throw new Error(
-      `Error HTTP ${respuesta.status} en ${url}. Respuesta: ${texto.slice(0, 150)}`
-    );
-  }
-
-  return respuesta.json();
-}
-
-async function obtenerInfoInicial() {
-  const data = await fetchJson(BASE_URL);
-  return data.info; 
-}
-
-// generando dinámicamente las URLs de las páginas.
-function generarUrlsDePaginas(totalPaginas) {
-  const urls = [];
-  for (let pagina = 1; pagina <= totalPaginas; pagina++) {
-    urls.push(`${BASE_URL}?page=${pagina}`);
-  }
-  return urls;
-}
-
+const { obtenerInfoInicial, generarUrlsDePaginas, fetchJson, esperar } = require("./api");
 
 // Estrategia secuencial
 async function obtenerTodosSecuencial() {
@@ -44,6 +11,7 @@ async function obtenerTodosSecuencial() {
   for (const url of urls) {
     const data = await fetchJson(url);
     personajes = personajes.concat(data.results);
+    await esperar(500);
   }
 
   const fin = Date.now();
@@ -52,15 +20,23 @@ async function obtenerTodosSecuencial() {
 }
 
 // Estrategia concurrente con Promise.all()
-async function obtenerTodosConcurrente() {
+async function obtenerTodosConcurrente(tamanoLote = 3, pausaEntreLotesMs = 2000) {
   const inicio = Date.now();
 
   const { pages: totalPaginas } = await obtenerInfoInicial();
   const urls = generarUrlsDePaginas(totalPaginas);
 
-  const promesas = urls.map((url) => fetchJson(url));
-  const resultados = await Promise.all(promesas);
-  const personajes = resultados.flatMap((data) => data.results);
+  let personajes = [];
+  for (let i = 0; i < urls.length; i += tamanoLote) {
+    const lote = urls.slice(i, i + tamanoLote);
+    const promesas = lote.map((url) => fetchJson(url));
+    const resultados = await Promise.all(promesas); // concurrente DENTRO del lote
+    personajes = personajes.concat(resultados.flatMap((data) => data.results));
+
+    if (i + tamanoLote < urls.length) {
+      await esperar(pausaEntreLotesMs);
+    }
+  }
 
   const fin = Date.now();
   console.log(`Estrategia CONCURRENTE: ${fin - inicio} ms, ${personajes.length} personajes`);
@@ -68,6 +44,7 @@ async function obtenerTodosConcurrente() {
 }
 
 module.exports = {
+  esperar,
   fetchJson,
   obtenerInfoInicial,
   generarUrlsDePaginas,

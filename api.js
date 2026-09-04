@@ -48,6 +48,7 @@ async function obtenerTodosLosPersonajes() {
 }
 
 module.exports = {
+  esperar,
   fetchJson,
   obtenerInfoInicial,
   generarUrlsDePaginas,

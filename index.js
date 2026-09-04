@@ -1,19 +1,11 @@
 const fs = require("fs");
-const { obtenerTodosLosPersonajes } = require("./src/api");
-const { normalizarPersonajes } = require("./src/normalizacion");
+const { obtenerTodosLosPersonajes } = require("./api");
+const { normalizarPersonajes } = require("./normalizacion");
 
 const CACHE_FILE = "cache.json";
 
 async function main() {
-  let personajesCrudos;
-
-  if (fs.existsSync(CACHE_FILE)) {
-    console.log("Usando cache local, no se llama a la API.");
-    personajesCrudos = JSON.parse(fs.readFileSync(CACHE_FILE, "utf-8"));
-  } else {
-    personajesCrudos = await obtenerTodosLosPersonajes();
-    fs.writeFileSync(CACHE_FILE, JSON.stringify(personajesCrudos));
-  }
+  const personajesCrudos = await obtenerTodosLosPersonajes();
 
   // Normalización con map
   const personajesNormalizados = normalizarPersonajes(personajesCrudos);
@@ -28,5 +20,5 @@ async function main() {
 }
 
 main();
-
+    
 module.exports = { main };

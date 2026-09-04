@@ -1,5 +1,6 @@
 const BASE_URL = "https://rickandmortyapi.com/api/character";
 
+// Realiza una pausa que evita que la API se sature de peticiones
 function esperar(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
